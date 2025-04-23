@@ -5,7 +5,7 @@ It's a python script that goes through all your save files and re-enables achiev
 ---
 
 Usage: 
-- [Download the EXE](https://github.com/NullDev/Oblivion-Remaster-ReEnable-Achievements/releases/download/1.1.0/re-enable_achievements.exe)
+- [Download the EXE](https://github.com/NullDev/Oblivion-Remaster-ReEnable-Achievements/releases/download/1.2.0/re-enable_achievements.exe)
 - Run it!
   - If prompted, enter path to your saves.
   - Usually: `C:\Users\<USERNAME>\Documents\My Games\Oblivion Remastered\Saved\SaveGames` 
