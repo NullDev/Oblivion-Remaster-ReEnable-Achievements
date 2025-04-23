@@ -56,7 +56,7 @@ def patch_bIsAchievementsDisabled(filepath):
 
 def patch_quick_autosaves(folder):
     for file in folder.iterdir():
-        if (file.name.startswith("autosave") or file.name == "quicksave.sav") and not file.name.endswith(".BAK"):
+        if (file.name.startswith("Save ") or file.name.startswith("autosave") or file.name == "quicksave.sav") and not file.name.endswith(".BAK"):
             print(f"🔧 Patching {file.name} (quick/autosave mode)...")
             with open(file, "rb") as f:
                 data = bytearray(f.read())
