@@ -1,5 +1,6 @@
 # Oblivion-Remaster-ReEnable-Achievements
-This script Re-Enables the achievements on all your current saves, after you e.g. used Console commands.
+This script Re-Enables the achievements on all your current saves, after you e.g. used Console commands. <br>
+It's a python script that goes through all your save files and re-enables achievements for all of them.
 
 Usage: 
 - Make sure to have [Python3](https://www.python.org/downloads/) installed.
