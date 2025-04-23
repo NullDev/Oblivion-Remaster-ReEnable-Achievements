@@ -11,12 +11,14 @@ def locate_save_folder():
     documents = Path.home() / "Documents"
     default_path = documents / "My Games" / "Oblivion Remastered" / "Saved" / "SaveGames"
     if default_path.exists():
+        print(f"✅ Save folder found automatically: {default_path}\n")
         return default_path
     else:
         print("⚠️ Save folder not found automatically.")
         return Path(input("Please enter the full path to your SaveGames folder: ").strip())
 
 def patch_bIsAchievementsDisabled(filepath):
+    print(f"🔧 Patching {filepath}...\n")
     with open(filepath, "rb") as f:
         data = bytearray(f.read())
 
@@ -60,6 +62,10 @@ def patch_bIsAchievementsDisabled(filepath):
     print(f"🛡️ Backup saved as: {bak_path}")
 
 def main():
+    print("🔧 Oblivion Remastered - Re-enable Achievements Script")
+    print("🔧 By NullDev")
+    print("🔧 https://github.com/NullDev/Oblivion-Remaster-ReEnable-Achievements\n")
+
     folder = locate_save_folder()
     file_path = folder / "saves_meta.sav"
 
@@ -68,6 +74,8 @@ def main():
         return
 
     patch_bIsAchievementsDisabled(file_path)
+
+    input("\nPress Enter to exit...")
 
 if __name__ == "__main__":
     main()
