@@ -4,7 +4,7 @@ It's a python script that goes through all your save files and re-enables achiev
 
 **IMPORTANT**: <br>
 The script won't prevent them from being disabled again. But you can always re-run it. <br>
-But you can use it in combination with https://www.nexusmods.com/oblivionremastered/mods/125 to enable achievements on your existing saves.
+You can also use it in combination with https://www.nexusmods.com/oblivionremastered/mods/125 to enable achievements on your existing saves.
 
 ---
 
