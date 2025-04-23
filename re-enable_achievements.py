@@ -10,9 +10,14 @@ from pathlib import Path
 def locate_save_folder():
     documents = Path.home() / "Documents"
     default_path = documents / "My Games" / "Oblivion Remastered" / "Saved" / "SaveGames"
+    gamepass_path = Path.home() / "AppData" / "Local" / "Packages" / "BethesdaSoftworks.ProjectAltar_3275kfvn8vcwc" / "SystemAppData" / "wgs" / "00090000040802E4_0000000000000000000000006516997E"
+
     if default_path.exists():
         print(f"✅ Save folder found automatically: {default_path}\n")
         return default_path
+    elif gamepass_path.exists():
+        print(f"✅ Gamepass save folder found automatically: {gamepass_path}\n")
+        return gamepass_path
     else:
         print("⚠️ Save folder not found automatically.")
         return Path(input("Please enter the full path to your SaveGames folder: ").strip())
