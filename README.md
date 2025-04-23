@@ -9,8 +9,9 @@ You can also use it in combination with https://www.nexusmods.com/oblivionremast
 ---
 
 Usage: 
-- [Download the EXE](https://github.com/NullDev/Oblivion-Remaster-ReEnable-Achievements/releases/download/1.2.3/re-enable_achievements.exe)
-- Run it!
+- [Download the ZIP](https://github.com/NullDev/Oblivion-Remaster-ReEnable-Achievements/releases/download/1.2.4/re-enable_achievements.zip)
+- Extract it anywhere
+- Run `re-enable_achievements.exe`
   - If prompted, enter path to your saves.
   - Usually: `C:\Users\<USERNAME>\Documents\My Games\Oblivion Remastered\Saved\SaveGames` 
 
