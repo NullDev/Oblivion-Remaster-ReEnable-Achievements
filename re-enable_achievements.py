@@ -61,7 +61,7 @@ def patch_bIsAchievementsDisabled(filepath):
 
 def patch_quick_autosaves(folder):
     for file in folder.iterdir():
-        if (file.name.startswith("Save ") or file.name.startswith("autosave") or file.name == "quicksave.sav") and not file.name.endswith(".BAK"):
+        if (file.name.startswith("autosave") or file.name == "quicksave.sav") and not file.name.endswith(".BAK"):
             print(f"🔧 Patching {file.name} (quick/autosave mode)...")
             with open(file, "rb") as f:
                 data = bytearray(f.read())
@@ -81,6 +81,37 @@ def patch_quick_autosaves(folder):
                         data[value_index] = 0x00
                         patched = True
                 idx = end_idx
+
+            if patched:
+                shutil.copy2(file, file.with_suffix(file.suffix + ".BAK"))
+                with open(file, "wb") as f:
+                    f.write(data)
+                print("✅ Patch applied. Backup created.")
+            else:
+                print("❌ No patch needed or pattern not found.")
+
+        elif file.name.startswith("Save ") and not file.name.endswith(".BAK"):
+            print(f"🔧 Patching {file.name} (manual save mode)...")
+            with open(file, "rb") as f:
+                data = bytearray(f.read())
+
+            patched = False
+            idx = 0
+
+            while True:
+                idx = data.find(b"bIsAchievementsDisabled", idx)
+                if idx == -1:
+                    break
+
+                bool_pattern = b"\x00\x0D\x00Bool\x00"
+                start = idx + len(b"bIsAchievementsDisabled")
+
+                if data[start:start + len(bool_pattern)] == bool_pattern:
+                    value_index = start + len(bool_pattern)
+                    if value_index < len(data) and data[value_index] == 0x01:
+                        data[value_index] = 0x00
+                        patched = True
+                idx = start
 
             if patched:
                 shutil.copy2(file, file.with_suffix(file.suffix + ".BAK"))
