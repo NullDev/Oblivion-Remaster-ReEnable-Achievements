@@ -1,31 +1,70 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+import os
 import shutil
+import time
 from pathlib import Path
 
 # ========================= #
 # = Copyright (c) NullDev = #
 # ========================= #
 
-def locate_save_folder():
+def read_file(filepath: Path) -> bytearray:
+    try:
+        with open(filepath, "rb") as f:
+            data = bytearray(f.read())
+        return data
+    except PermissionError:
+        print(f"❌ Unable to read {filepath.name}, check permissions.")
+    except Exception as exc:
+        print(f"❌ Unknown error occurred accessing {filepath.name}: {exc}.")
+    return None
+
+def write_file(filepath: Path, data: bytearray) -> None:
+    try:
+        with open(filepath, "wb") as f:
+            f.write(data)
+        print(f"✅ Patched {filepath.name}. Backup created.")
+    except PermissionError:
+        print(f"❌ Unable to write to {filepath.name}, check permissions.")
+    except Exception as exc:
+        print(f"❌ Unknown error occurred writing to {filepath.name}: {exc}.")
+
+def locate_save_folder() -> Path:
     documents = Path.home() / "Documents"
     default_path = documents / "My Games" / "Oblivion Remastered" / "Saved" / "SaveGames"
-    gamepass_path = Path.home() / "AppData" / "Local" / "Packages" / "BethesdaSoftworks.ProjectAltar_3275kfvn8vcwc" / "SystemAppData" / "wgs" / "00090000040802E4_0000000000000000000000006516997E"
 
-    if default_path.exists():
-        print(f"✅ Save folder found automatically: {default_path}\n")
-        return default_path
-    elif gamepass_path.exists():
-        print(f"✅ Gamepass save folder found automatically: {gamepass_path}\n")
-        return gamepass_path
-    else:
-        print("⚠️ Save folder not found automatically.")
-        return Path(input("Please enter the full path to your SaveGames folder: ").strip())
+    linux_path = Path.home() / ".local" / "share" / "Steam" / "steamapps" / \
+                 "compatdata" / "2623190" / "pfx" / "drive_c" / "users" / "steamuser" / "Documents" / \
+                 "My Games" / "Oblivion Remastered" / "Saved" / "SaveGames"
 
-def patch_bIsAchievementsDisabled(filepath):
+    gamepass_path = Path.home() / "AppData" / "Local" / "Packages" / \
+                    "BethesdaSoftworks.ProjectAltar_3275kfvn8vcwc" / "SystemAppData" / \
+                    "wgs" / "00090000040802E4_0000000000000000000000006516997E"
+
+    if os.name == 'nt':
+        if default_path.exists():
+            print(f"✅ Save folder found automatically: {default_path}\n")
+            return default_path
+        elif gamepass_path.exists():
+            print(f"✅ Gamepass save folder found automatically: {gamepass_path}\n")
+            return gamepass_path
+    elif os.name == 'posix':
+        if linux_path.exists():
+            print(f"✅ Save directory found automatically: {linux_path}\n")
+            return linux_path
+
+    while True:
+        print("⚠️ Save folder not found automatically or system not detected.")
+        path = Path(input("Please enter the full path to your SaveGames folder: ").strip())
+        if path.exists():
+            return path
+
+def patch_bIsAchievementsDisabled(filepath: Path) -> None:
     print(f"🔧 Patching {filepath.name} (saves_meta mode)...")
-    with open(filepath, "rb") as f:
-        data = bytearray(f.read())
+    data = read_file(filepath)
+    if not data:
+        return
 
     value_offset = 21  # Offset from BoolProperty to value byte
     patches = 0
@@ -52,19 +91,18 @@ def patch_bIsAchievementsDisabled(filepath):
         index = ess_index + 1
 
     if patches:
-        shutil.copy2(filepath, filepath.with_suffix(filepath.suffix + ".BAK"))
-        with open(filepath, "wb") as f:
-            f.write(data)
-        print(f"✅ Patched {patches} occurrence(s). Backup created.")
+        shutil.copy2(filepath, filepath.with_suffix(filepath.suffix + f".BAK{int(time.time())}"))
+        write_file(filepath, data)
     else:
-        print("❌ No patches applied.")
+        print("❌ No patches applied.\n")
 
-def patch_quick_autosaves(folder):
+def patch_quick_autosaves(folder: Path) -> None:
     for file in folder.iterdir():
-        if (file.name.startswith("autosave") or file.name == "quicksave.sav") and not file.name.endswith(".BAK"):
+        if (file.name.startswith("autosave") or file.name == "quicksave.sav") and not ".BAK" in file.name:
             print(f"🔧 Patching {file.name} (quick/autosave mode)...")
-            with open(file, "rb") as f:
-                data = bytearray(f.read())
+            data = read_file(file)
+            if not data:
+                continue
 
             patched = False
             idx = 0
@@ -83,17 +121,16 @@ def patch_quick_autosaves(folder):
                 idx = end_idx
 
             if patched:
-                shutil.copy2(file, file.with_suffix(file.suffix + ".BAK"))
-                with open(file, "wb") as f:
-                    f.write(data)
-                print("✅ Patch applied. Backup created.")
+                shutil.copy2(file, file.with_suffix(file.suffix + ".BAK{int(time.time())}"))
+                write_file(file, data)
             else:
                 print("❌ No patch needed or pattern not found.")
 
-        elif file.name.startswith("Save ") and not file.name.endswith(".BAK"):
+        elif file.name.startswith("Save ") and not ".BAK" in file.name:
             print(f"🔧 Patching {file.name} (manual save mode)...")
-            with open(file, "rb") as f:
-                data = bytearray(f.read())
+            data = read_file(file)
+            if not data:
+                continue
 
             patched = False
             idx = 0
@@ -114,14 +151,12 @@ def patch_quick_autosaves(folder):
                 idx = start
 
             if patched:
-                shutil.copy2(file, file.with_suffix(file.suffix + ".BAK"))
-                with open(file, "wb") as f:
-                    f.write(data)
-                print("✅ Patch applied. Backup created.")
+                shutil.copy2(file, file.with_suffix(file.suffix + f".BAK{int(time.time())}"))
+                write_file(file, data)
             else:
                 print("❌ No patch needed or pattern not found.")
 
-def main():
+def main() -> None:
     print("🔧 Oblivion Remastered - Re-enable Achievements Script")
     print("🔧 By NullDev")
     print("🔧 https://github.com/NullDev/Oblivion-Remaster-ReEnable-Achievements\n")
@@ -132,10 +167,11 @@ def main():
     if meta_file.exists():
         patch_bIsAchievementsDisabled(meta_file)
     else:
-        print(f"⚠️ {meta_file.name} not found. Skipping.")
+        print(f"⚠️ {meta_file.name} not found. Skipping.\n")
 
     patch_quick_autosaves(folder)
-    input("\nPress Enter to exit...")
+    print("\nExiting.")
 
 if __name__ == "__main__":
     main()
+
