@@ -55,3 +55,13 @@ For the manual saves it was pretty easy, you have "FlagName 00 0D 00 Bool XX" wh
 ---
 
 Nexus Mods Page: https://www.nexusmods.com/oblivionremastered/mods/112
+
+---
+
+**Contributors**
+
+<a href="https://github.com/NullDev/Oblivion-Remaster-ReEnable-Achievements/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=NullDev/Oblivion-Remaster-ReEnable-Achievements" />
+</a>
+
+<sub>Made with [contrib.rocks](https://contrib.rocks).</sub>
