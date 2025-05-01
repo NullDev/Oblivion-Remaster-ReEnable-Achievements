@@ -58,6 +58,10 @@ Nexus Mods Page: https://www.nexusmods.com/oblivionremastered/mods/112
 
 ---
 
+[Linux path, improved error handling and backup files timestamps](https://github.com/NullDev/Oblivion-Remaster-ReEnable-Achievements/commit/919ad30fcc56fd436325eab6a33417d860c3ee0c) - Thanks to [@insularia](https://github.com/insularia) 
+
+---
+
 **Contributors**
 
 <a href="https://github.com/NullDev/Oblivion-Remaster-ReEnable-Achievements/graphs/contributors">
