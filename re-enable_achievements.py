@@ -170,8 +170,7 @@ def main() -> None:
         print(f"⚠️ {meta_file.name} not found. Skipping.\n")
 
     patch_quick_autosaves(folder)
-    print("\nExiting.")
+    input("\nPress Enter to exit...")
 
 if __name__ == "__main__":
     main()
-
