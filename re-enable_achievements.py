@@ -121,7 +121,7 @@ def patch_quick_autosaves(folder: Path) -> None:
                 idx = end_idx
 
             if patched:
-                shutil.copy2(file, file.with_suffix(file.suffix + ".BAK{int(time.time())}"))
+                shutil.copy2(file, file.with_suffix(file.suffix + f".BAK{int(time.time())}"))
                 write_file(file, data)
             else:
                 print("❌ No patch needed or pattern not found.")
