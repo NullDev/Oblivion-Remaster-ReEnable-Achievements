@@ -121,7 +121,7 @@ def patch_quick_autosaves(folder: Path) -> None:
                 idx = end_idx
 
             if patched:
-                shutil.copy2(file, file.with_suffix(file.suffix + ".BAK{int(time.time())}"))
+                shutil.copy2(file, file.with_suffix(file.suffix + f".BAK{int(time.time())}"))
                 write_file(file, data)
             else:
                 print("❌ No patch needed or pattern not found.")
@@ -140,7 +140,7 @@ def patch_quick_autosaves(folder: Path) -> None:
                 if idx == -1:
                     break
 
-                bool_pattern = b"\x00\x0D\x00Bool\x00"
+                bool_pattern = b"\x00\x0D\x00Bool"
                 start = idx + len(b"bIsAchievementsDisabled")
 
                 if data[start:start + len(bool_pattern)] == bool_pattern:
