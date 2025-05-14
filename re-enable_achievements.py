@@ -97,7 +97,7 @@ def patch_bIsAchievementsDisabled(filepath: Path) -> None:
         print("❌ No patches applied.\n")
 
 def patch_quick_autosaves(folder: Path) -> None:
-    for file in folder.iterdir():
+    for file in sorted(folder.iterdir(), key=os.path.getmtime):
         if (file.name.startswith("autosave") or file.name == "quicksave.sav") and not ".BAK" in file.name:
             print(f"🔧 Patching {file.name} (quick/autosave mode)...")
             data = read_file(file)
